@@ -1,5 +1,6 @@
 using FitnessOperationsApi.Data;
 using FitnessOperationsApi.Repositories;
+using FitnessOperationsApi.Repositories.Access;
 using FitnessOperationsApi.Repositories.Branches;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Register Repository
 builder.Services.AddScoped<IBranchRepository, BranchRepository>();
+
+// Register MemberBranchAccessRepository Repository
+builder.Services.AddScoped<IMemberBranchAccessRepository, MemberBranchAccessRepository>();
+
+// Register Dapper
+builder.Services.AddSingleton<DapperContext>();
 
 var app = builder.Build();
 

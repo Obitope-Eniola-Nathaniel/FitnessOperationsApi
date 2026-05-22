@@ -8,3 +8,6 @@ Npgsql.EntityFrameworkCore.PostgreSQL       10.0.1
 dotnet ef migrations add InitialFitnessSchema
 dotnet ef database update
 
+dotnet add package Dapper
+
+dotnet add package Npgsql
