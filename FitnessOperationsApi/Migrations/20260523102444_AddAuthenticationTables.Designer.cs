@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FitnessOperationsApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260521153509_InitialFitnessSchema")]
-    partial class InitialFitnessSchema
+    [Migration("20260523102444_AddAuthenticationTables")]
+    partial class AddAuthenticationTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,6 +159,77 @@ namespace FitnessOperationsApi.Migrations
                     b.ToTable("MemberBranchAccesses");
                 });
 
+            modelBuilder.Entity("FitnessOperationsApi.Models.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("FitnessOperationsApi.Models.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("FitnessOperationsApi.Models.Member", b =>
                 {
                     b.HasOne("FitnessOperationsApi.Models.Branch", "HomeBranch")
@@ -189,6 +260,17 @@ namespace FitnessOperationsApi.Migrations
                     b.Navigation("Member");
                 });
 
+            modelBuilder.Entity("FitnessOperationsApi.Models.RefreshToken", b =>
+                {
+                    b.HasOne("FitnessOperationsApi.Models.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("FitnessOperationsApi.Models.Branch", b =>
                 {
                     b.Navigation("MemberBranchAccesses");
@@ -199,6 +281,11 @@ namespace FitnessOperationsApi.Migrations
             modelBuilder.Entity("FitnessOperationsApi.Models.Member", b =>
                 {
                     b.Navigation("MemberBranchAccesses");
+                });
+
+            modelBuilder.Entity("FitnessOperationsApi.Models.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

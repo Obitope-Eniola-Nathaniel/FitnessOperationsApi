@@ -3,6 +3,7 @@ using FitnessOperationsApi.DTOs.Members;
 using FitnessOperationsApi.Models;
 using FitnessOperationsApi.Repositories.Members;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FitnessOperationsApi.Controllers;
 
@@ -21,6 +22,8 @@ public class MembersController : ControllerBase
     public async Task<IActionResult> Create(CreateMemberRequest request)
     {
         var existing = await _memberRepository.GetByEmailAsync(request.Email);
+        
+        // check if the branch exits first
 
         if (existing != null)
         {

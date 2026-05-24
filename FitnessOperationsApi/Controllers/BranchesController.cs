@@ -1,9 +1,11 @@
 ﻿
-using Microsoft.AspNetCore.Mvc;
 using FitnessOperationsApi.Common;
+using FitnessOperationsApi.Common.Constants;
 using FitnessOperationsApi.DTOs.Branches;
 using FitnessOperationsApi.Models;
 using FitnessOperationsApi.Repositories.Branches;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FitnessOperationsApi.Controllers;
 
@@ -18,8 +20,8 @@ public class BranchesController : Controller
         _branchRepository = branchRepository;
     }
 
-
-    [HttpPost]
+    [Authorize(Roles = Roles.Admin + "," + Roles.Manager)]
+    [HttpPost("create-branch")]
     public async Task<IActionResult> CreateBranch([FromBody] CreateBranchRequest request)
     {
         if (!ModelState.IsValid)

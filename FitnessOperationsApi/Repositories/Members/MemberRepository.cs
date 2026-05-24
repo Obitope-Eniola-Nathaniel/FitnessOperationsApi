@@ -4,7 +4,7 @@ using FitnessOperationsApi.Models;
 
 namespace FitnessOperationsApi.Repositories.Members;
 
-public class MemberRepository
+public class MemberRepository : IMemberRepository
 {
     private readonly AppDbContext _context;
 

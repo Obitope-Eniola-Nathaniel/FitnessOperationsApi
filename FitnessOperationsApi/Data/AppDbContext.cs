@@ -10,8 +10,9 @@ public class AppDbContext : DbContext
     {
     }
 
+    public DbSet<User> Users => Set<User>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Branch> Branches => Set<Branch>();
-
     public DbSet<Member> Members => Set<Member>();
 
     public DbSet<MemberBranchAccess> MemberBranchAccesses => Set<MemberBranchAccess>();
@@ -28,6 +29,19 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Branch>().HasIndex(x => x.Email).IsUnique();
 
         modelBuilder.Entity<Member>().HasIndex(x => x.Email).IsUnique();
+
+        modelBuilder.Entity<User>().HasIndex(x => x.Email).IsUnique();
+
+
+        /*
+            One-to-Many
+            User -> RefreshTokens
+        */
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.RefreshTokens)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         /*
             One-to-Many

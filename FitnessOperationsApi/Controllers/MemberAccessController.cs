@@ -20,7 +20,7 @@ public class MemberAccessController : ControllerBase
     [HttpPost("assign")]
     public async Task<IActionResult> Assign(AssignMemberBranchRequest request)
     {
-        var exists =await _repository.AssignmentExistsAsync(request.MemberId, request.BranchId);
+        var exists = await _repository.AssignmentExistsAsync(request.MemberId, request.BranchId);
 
         if (exists)
         {
@@ -67,7 +67,7 @@ public class MemberAccessController : ControllerBase
     [HttpDelete("revoke")]
     public async Task<IActionResult> Revoke(Guid memberId, Guid branchId)
     {
-        var revoked =await _repository.RevokeAccessAsync(memberId, branchId);
+        var revoked = await _repository.RevokeAccessAsync(memberId, branchId);
 
         if (!revoked)
         {
@@ -84,3 +84,6 @@ public class MemberAccessController : ControllerBase
             ResponseCode = "00"
         });
     }
+}
+
+//Hybrid Data Access
